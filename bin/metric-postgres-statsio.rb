@@ -29,6 +29,8 @@
 #   for details.
 #
 
+# XXX: Not sure why, metrics return nil
+
 require 'sensu-plugin/metric/cli'
 require 'pg'
 require 'socket'
@@ -80,6 +82,8 @@ class PostgresStatsIOMetrics < Sensu::Plugin::Metric::CLI::Graphite
          default: nil
 
   def run
+    require 'pry-byebug'
+    binding.pry
     timestamp = Time.now.to_i
 
     con     = PG.connect(host: config[:hostname],

@@ -54,8 +54,8 @@ class PostgresStatsDBMetrics < Sensu::Plugin::Metric::CLI::Graphite
          short: '-P PORT',
          long: '--port PORT',
          default: 5432
-
-  option :db,
+  # NOTE: inconsistent naming for CLI arguments
+  option :database,
          description: 'Database name',
          short: '-d DB',
          long: '--db DB',
@@ -84,7 +84,7 @@ class PostgresStatsDBMetrics < Sensu::Plugin::Metric::CLI::Graphite
                          connect_timeout: config[:timeout])
     request = [
       'SELECT mode, count(mode) FROM pg_locks',
-      "where database = (select oid from pg_database where datname = '#{config[:db]}')",
+      "where database = (select oid from pg_database where datname = '#{config[:database]}')",
       'group by mode'
     ]
 
@@ -96,7 +96,7 @@ class PostgresStatsDBMetrics < Sensu::Plugin::Metric::CLI::Graphite
     end
 
     locks_per_type.each do |lock_type, count|
-      output "#{config[:scheme]}.locks.#{config[:db]}.#{lock_type}", count, timestamp
+      output "#{config[:scheme]}.locks.#{config[:database]}.#{lock_type}", count, timestamp
     end
 
     ok

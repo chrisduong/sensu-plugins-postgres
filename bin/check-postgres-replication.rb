@@ -87,6 +87,7 @@ class CheckPostgresReplicationStatus < Sensu::Plugin::Check::CLI
   def compute_lag(master, slave, m_segbytes)
     m_segment, m_offset = master.split('/')
     s_segment, s_offset = slave.split('/')
+    # NOTE: how to calculate in hex offset address.
     ((m_segment.hex - s_segment.hex) * m_segbytes) + (m_offset.hex - s_offset.hex)
   end
 
